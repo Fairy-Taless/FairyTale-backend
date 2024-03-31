@@ -11,6 +11,13 @@ java {
 	sourceCompatibility = '17'
 }
 
+// build 이름 변경
+jar{
+	archiveBaseName = 'fairytale'
+	version = '0.0.1-SNAPSHOT'
+	enabled = false
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
