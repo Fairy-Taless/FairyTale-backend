@@ -9,13 +9,19 @@ public enum ErrorStatus implements BaseCode {
 	_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
 	_FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
+	// Fairytale
+
+	_FAIRYTALE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FAIRYTALE4001", "존재하지 않는 동화입니다."),
+	_FAIRYTALE_EXIST_ERROR(HttpStatus.BAD_REQUEST, "FAIRYTALE4002", "이미 존재하는 이름의 동화입니다."),
+
 	// ElevenLabs
 	_FILE_CONVERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일 변환에 실패했습니다."),
 
 	// Voice
 
 	_EXIST_VOICE(HttpStatus.BAD_REQUEST, "VOICE4001", "이미 존재하는 목소리입니다."),
-	_VOICE_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "VOICE4002", "목소리 저장에 실패했습니다."),
+	_VOICE_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "VOICE5002", "목소리 저장에 실패했습니다."),
+	_INVALID_VOICE_TYPE(HttpStatus.BAD_REQUEST, "VOICE4002", "올바르지 않은 목소리 종류입니다."),
 
 	// User
 	_EXIST_USERNAME(HttpStatus.BAD_REQUEST, "USER4001", "이미 존재하는 닉네임입니다."),
