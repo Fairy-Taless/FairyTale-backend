@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-@RequestMapping("/fjaceSwap")
+@RequestMapping("/faceSwap")
 @RequiredArgsConstructor
 public class FaceSwapRestController {
 
