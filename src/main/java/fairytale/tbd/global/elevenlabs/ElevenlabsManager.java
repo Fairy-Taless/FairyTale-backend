@@ -86,6 +86,9 @@ public class ElevenlabsManager {
 		builder.withDescription("the emotional voice of the main character of a children's book");
 		builder.withLabel("language", "ko");
 		Voice voice = builder.create();
+		if(file != null && file.exists()){
+			file.delete();
+		}
 		return voice.getVoiceId();
 	}
 
