@@ -1,5 +1,5 @@
 package fairytale.tbd.domain.voice.entity;
-
+import fairytale.tbd.domain.fairytale.entity.Fairytale;
 import fairytale.tbd.domain.voice.enums.VoiceType;
 import fairytale.tbd.global.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class Segment extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "fariytale_segment_id")
+	@Column(name = "fairytale_segment_id")
 	private Long id;
 
 	@Column(name = "segment_context", nullable = false)

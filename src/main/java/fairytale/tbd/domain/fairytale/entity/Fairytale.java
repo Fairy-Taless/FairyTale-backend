@@ -1,8 +1,9 @@
-package fairytale.tbd.domain.voice.entity;
+package fairytale.tbd.domain.fairytale.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fairytale.tbd.domain.voice.entity.Segment;
 import fairytale.tbd.global.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

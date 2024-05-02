@@ -1,7 +1,9 @@
 package fairytale.tbd.global.aws.s3;
 
 import java.io.IOException;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,15 @@ public class AmazonS3Manager {
 	private final AmazonS3 amazonS3;
 	private final AmazonConfig amazonConfig;
 
+	@Value("${cloud.aws.s3.path.voice-sample}")
+	public String VOICE_SAMPLE_PATH;
+
+	@Value("${cloud.aws.s3.path.common-voice}")
+	public String TTS_COMMON_VOICE_PATH;
+
+	@Value("${cloud.aws.s3.path.user-voice}")
+	public String TTS_USER_VOICE_PATH;
+
 	public String uploadFile(String keyName, MultipartFile file) {
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentType(file.getContentType());
@@ -35,6 +46,14 @@ public class AmazonS3Manager {
 		}
 
 		return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
+	}
+
+	public String generateS3SavePath(String path) {
+		return path + '/' + UUID.randomUUID().toString();
+	}
+
+	public String generateS3SavePath(String path, String name) {
+		return path + '/' + name;
 	}
 
 }
