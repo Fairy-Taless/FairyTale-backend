@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,13 @@ public class VoiceRestController {
 		LOGGER.info("request = {}", request);
 		Voice voice = voiceCommandService.uploadVoice(request, user);
 		return ApiResponse.onSuccess(VoiceConverter.toAddVoiceResult(voice));
+	}
+
+	@PostMapping("/segment")
+	public ApiResponse<VoiceResponseDTO.AddTTSSegmentResultDTO> addSegment(
+		@Valid @RequestBody VoiceRequestDTO.AddSegmentDTO request) {
+		VoiceResponseDTO.AddTTSSegmentResultDTO result = voiceCommandService.addTTSSegment(request);
+		return ApiResponse.onSuccess(result);
 	}
 
 }
