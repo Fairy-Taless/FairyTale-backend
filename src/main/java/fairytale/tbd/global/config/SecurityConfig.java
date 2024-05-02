@@ -2,7 +2,6 @@ package fairytale.tbd.global.config;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,16 +62,13 @@ public class SecurityConfig {
 			// CORS
 			.cors(corsCustomizer -> corsCustomizer.configurationSource(request -> {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(List.of("*");
-				config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+				config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+				config.setAllowedMethods(Collections.singletonList("*"));
 				config.setAllowCredentials(true);
-				config.setAllowedHeaders(List.of("*"));
+				config.setAllowedHeaders(Collections.singletonList("*"));
 				config.setExposedHeaders(Arrays.asList("Authorization", "Authorization-refresh"));
 				config.setMaxAge(3600L);
-
-				UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-				source.registerCorsConfiguration("/**", config);
-				return source;
+				return config;
 			}));
 		http.addFilterAfter(customUsernamePwdAuthenticationFilter(), LogoutFilter.class);
 		http.addFilterBefore(jwtAuthenticationFilter(), CustomUsernamePwdAuthenticationFilter.class);
