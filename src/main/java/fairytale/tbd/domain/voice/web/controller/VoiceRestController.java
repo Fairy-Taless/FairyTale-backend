@@ -38,8 +38,11 @@ public class VoiceRestController {
 	@PostMapping("/segment")
 	public ApiResponse<VoiceResponseDTO.AddTTSSegmentResultDTO> addSegment(
 		@Valid @RequestBody VoiceRequestDTO.AddSegmentDTO request) {
+		LOGGER.info("::: Segment 추가 요청 :::");
 		VoiceResponseDTO.AddTTSSegmentResultDTO result = voiceCommandService.addTTSSegment(request);
+		LOGGER.info("::: Segment 추가 성공 SegmentId = {}:::", result.getSegmentId());
 		return ApiResponse.onSuccess(result);
 	}
+
 
 }

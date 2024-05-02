@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "fairytale_segment")
 public class Segment extends BaseEntity {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)ㅁ
-	@Column(name = "fariytale_segment_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "fairytale_segment_id")
 	private Long id;
 
 	@Column(name = "segment_context", nullable = false)
