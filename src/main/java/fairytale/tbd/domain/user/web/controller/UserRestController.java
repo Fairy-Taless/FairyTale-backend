@@ -24,7 +24,7 @@ public class UserRestController {
 	private final UserCommandService userCommandService;
 	private static final Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
-	@PostMapping("")
+	@PostMapping("/signup")
 	public ApiResponse<UserResponseDTO.AddUserResultDTO> join(@Valid @RequestBody UserRequestDTO.AddUserDTO request) {
 		LOGGER.info("request = {}", request);
 		User user = userCommandService.addUser(request);

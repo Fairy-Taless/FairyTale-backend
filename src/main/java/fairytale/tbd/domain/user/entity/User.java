@@ -1,6 +1,9 @@
 package fairytale.tbd.domain.user.entity;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fairytale.tbd.domain.user.enums.Gender;
 import fairytale.tbd.domain.voice.entity.Voice;
 import fairytale.tbd.global.entity.BaseEntity;
@@ -13,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,14 +49,30 @@ public class User extends BaseEntity {
 	@Column(name = "username", nullable = false)
 	private String username;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@Column(name = "refresh_token", nullable = true)
+	private String refreshToken;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Voice voice;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Authority> authorityList = new ArrayList<>();
 
 
 	// 연관관계 편의 메서드
 	public void setVoice(Voice voice){
 		this.voice = voice;
 		voice.setUser(this);
+	}
+
+	public void addAuthority(Authority authority){
+		authorityList.add(authority);
+		authority.setUser(this);
+	}
+
+	// RefreshToken update
+	public void updateRefreshToken(String refreshToken){
+		this.refreshToken = refreshToken;
 	}
 
 }
