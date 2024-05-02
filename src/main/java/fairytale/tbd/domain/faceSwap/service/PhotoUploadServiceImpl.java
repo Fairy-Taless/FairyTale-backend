@@ -1,9 +1,8 @@
 package fairytale.tbd.domain.faceSwap.service;
 
-import fairytale.tbd.domain.faceSwap.entity.CustomCharacter;
 import fairytale.tbd.domain.faceSwap.entity.Uuid;
-import fairytale.tbd.domain.faceSwap.repository.CustomCharacterRepository;
 import fairytale.tbd.domain.faceSwap.repository.UuidRepository;
+import fairytale.tbd.domain.faceSwap.web.dto.FaceDetectRequestDto;
 import fairytale.tbd.global.aws.s3.AmazonS3Manager;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +17,29 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PhotoUploadServiceImpl {
+public class PhotoUploadServiceImpl implements PhotoUploadService {
 
     private final UuidRepository uuidRepository;
-    private final CustomCharacterRepository customCharacterRepository;
     private final AmazonS3Manager amazonS3Manager;
 
-    public void savePhotos(MultipartFile file) throws IOException{
-        try{
-            String uuid = UUID.randomUUID().toString();
+    @Override
+    @Transactional
+    public FaceDetectRequestDto savePhotos(MultipartFile file) throws IOException {
+        String imgURL = "";
+        String uuid = UUID.randomUUID().toString();
 
+        try {
             Uuid saveUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-
             byte[] imageData = file.getBytes();
-
-            String imgURL = amazonS3Manager.uploadFile(saveUuid.getUuid(), file);
+            imgURL = amazonS3Manager.uploadFile(saveUuid.getUuid(), file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        FaceDetectRequestDto faceDetectRequestDto = new FaceDetectRequestDto();
+        faceDetectRequestDto.setImgURL(imgURL);
+
+        return faceDetectRequestDto;
     }
+
 }
