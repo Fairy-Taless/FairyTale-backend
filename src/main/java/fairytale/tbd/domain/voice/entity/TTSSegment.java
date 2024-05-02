@@ -30,9 +30,6 @@ public class TTSSegment extends BaseEntity {
 	@Column(name = "text_to_speech_segment_url")
 	private String url;
 
-	@Column(name = "history_id")
-	private String historyId;
-
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fairytale_segment_id")
 	private Segment segment;
