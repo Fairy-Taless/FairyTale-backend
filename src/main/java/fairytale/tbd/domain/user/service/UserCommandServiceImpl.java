@@ -20,6 +20,10 @@ public class UserCommandServiceImpl implements UserCommandService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
+	/**
+	 * 사용자가 회원가입에서 입력한 PLANE TEXT를
+	 * 암호화 하고, 유저의 권한을 추가 한 후, 데이터베이스에 저장
+	 */
 	@Transactional
 	@Override
 	public User addUser(UserRequestDTO.AddUserDTO request) {

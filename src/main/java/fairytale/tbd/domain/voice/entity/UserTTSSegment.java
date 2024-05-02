@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,9 +28,6 @@ public class UserTTSSegment extends BaseEntity {
 	@Column(name = "uset_text_to_speech_segment_id")
 	private Long id;
 
-	@Column(name = "history_id", nullable = false)
-	private String historyId;
-
 	@Column(name = "user_text_to_speech_segment_url")
 	private String url;
 
@@ -39,7 +35,7 @@ public class UserTTSSegment extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fairytale_segment_id")
 	private Segment segment;
 

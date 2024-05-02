@@ -22,6 +22,8 @@ public enum ErrorStatus implements BaseCode {
 	_EXIST_VOICE(HttpStatus.BAD_REQUEST, "VOICE4001", "이미 존재하는 목소리입니다."),
 	_VOICE_SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "VOICE5002", "목소리 저장에 실패했습니다."),
 	_INVALID_VOICE_TYPE(HttpStatus.BAD_REQUEST, "VOICE4002", "올바르지 않은 목소리 종류입니다."),
+	_VOICE_NOT_FOUND(HttpStatus.BAD_REQUEST, "VOICE4003", "저장되어 있는 사용자 음성이 없습니다."),
+	_USER_TTS_DUPLCATION(HttpStatus.INTERNAL_SERVER_ERROR, "VOICE5003", "변환된 음성에서 중복되는 데이터가 있습니다."),
 
 	// User
 	_EXIST_USERNAME(HttpStatus.BAD_REQUEST, "USER4001", "이미 존재하는 닉네임입니다."),

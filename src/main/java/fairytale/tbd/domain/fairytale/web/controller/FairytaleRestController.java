@@ -20,6 +20,9 @@ import lombok.RequiredArgsConstructor;
 public class FairytaleRestController {
 	private final FairytaleCommandService fairytaleCommandService;
 
+	/**
+	 * 동화 추가 메서드
+	 */
 	@PostMapping("")
 	public ApiResponse<FairytaleResponseDTO.AddFairytaleResultDTO> addFairytale(@Valid @RequestBody
 	FairytaleRequestDTO.AddFairytaleRequestDTO request) {

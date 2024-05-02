@@ -2,10 +2,13 @@ package fairytale.tbd.domain.voice.web.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import fairytale.tbd.domain.voice.enums.VoiceType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 public class VoiceRequestDTO {
 	@Getter
@@ -18,12 +21,15 @@ public class VoiceRequestDTO {
 
 	@Getter
 	@Setter
+	@ToString
 	public static class AddSegmentDTO {
 		private String context;
+		@JsonProperty("isMainCharacter")
 		private boolean isMainCharacter;
 		private VoiceType voiceType;
 		private Long fairytaleId;
-		private Long segmentNum;
+		private Double segmentNum;
+		private Long pageNum;
 	}
 
 }
