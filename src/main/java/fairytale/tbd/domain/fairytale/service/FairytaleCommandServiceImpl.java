@@ -17,9 +17,13 @@ import lombok.RequiredArgsConstructor;
 public class FairytaleCommandServiceImpl implements FairytaleCommandService {
 	private final FairytaleRepository fairytaleRepository;
 
+	/**
+	 * 동화 추가 서비스 로직
+	 */
 	@Override
 	@Transactional
 	public Fairytale saveFairytale(FairytaleRequestDTO.AddFairytaleRequestDTO request) {
+		// TODO BEAN VALIDATION
 		if (fairytaleRepository.existsByName(request.getName())) {
 			throw new GeneralException(ErrorStatus._FAIRYTALE_EXIST_ERROR);
 		}
