@@ -91,6 +91,7 @@ public class VoiceCommandServiceImpl implements VoiceCommandService {
 
 		Segment segment = VoiceConverter.toSegment(request);
 		fairytale.addSegment(segment);
+		segmentRepository.save(segment);
 
 		File file = elevenlabsManager.elevenLabsTTS(segment.getContext(), segment.getVoiceType());
 
@@ -115,5 +116,6 @@ public class VoiceCommandServiceImpl implements VoiceCommandService {
 		TTSSegment save = ttsSegmentRepository.save(ttsSegment);
 		return VoiceConverter.toAddSegmentResultDTO(save, segment.getId());
 	}
+
 
 }

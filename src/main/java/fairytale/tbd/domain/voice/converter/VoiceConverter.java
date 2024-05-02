@@ -1,5 +1,7 @@
 package fairytale.tbd.domain.voice.converter;
 
+import java.util.ArrayList;
+
 import fairytale.tbd.domain.voice.entity.Segment;
 import fairytale.tbd.domain.voice.entity.TTSSegment;
 import fairytale.tbd.domain.voice.entity.Voice;
@@ -17,6 +19,7 @@ public class VoiceConverter {
 
 	public static Voice toVoice(String keyId) {
 		return Voice.builder()
+			.voiceSampleList(new ArrayList<>())
 			.keyId(keyId)
 			.build();
 	}
