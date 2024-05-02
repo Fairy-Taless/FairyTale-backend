@@ -1,8 +1,6 @@
 package fairytale.tbd.global.elevenlabs;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,12 +16,13 @@ import net.andrewcpu.elevenlabs.model.voice.Voice;
 import net.andrewcpu.elevenlabs.model.voice.VoiceBuilder;
 import net.andrewcpu.elevenlabs.model.voice.VoiceSettings;
 
+import fairytale.tbd.domain.voice.enums.VoiceType;
+import fairytale.tbd.domain.voice.exception.InvalidVoiceTypeException;
 import fairytale.tbd.global.elevenlabs.exception.FileConvertException;
 import fairytale.tbd.global.enums.statuscode.ErrorStatus;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 
 /**
  * https://github.com/Andrewcpu/elevenlabs-api
@@ -45,15 +44,46 @@ public class ElevenlabsManager {
 	private double stability;
 	@Value("${voice.elevenlabs.voice_setting.style}")
 	private double style;
+
+	@Value("${voice.elevenlabs.narration-voice-setting.similarity_boost}")
+	private double Nsimilarity;
+	@Value("${voice.elevenlabs.narration-voice-setting.stability}")
+	private double Nstability;
+	@Value("${voice.elevenlabs.narration-voice-setting.style}")
+	private double Nstyle;
+	@Value("${voice.elevenlabs.narration-voice-setting.use-speaker-boost}")
+	private boolean NuseSpeakerBoost;
+
 	@Value("${voice.elevenlabs.voice_setting.use_speaker_boost}")
 	private boolean useSpeakerBoost;
 
+	@Value("${voice.elevenlabs.common-voice-id.old-man}")
+	private String oldManKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.old-woman}")
+	private String oldWomanKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.middle-age-man}")
+
+	private String middleAgeManKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.middle-age-woman}")
+	private String middleAgeWomanKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.young-man}")
+	private String youngManKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.young_woman}")
+	private String youngWomanKey;
+
+	@Value("${voice.elevenlabs.common-voice-id.narration-woman}")
+	private String narrationWomanKey;
+
 	@PostConstruct
-	public void init(){
+	public void init() {
 		ElevenLabs.setApiKey(apiKey);
 		ElevenLabs.setDefaultModel("eleven_multilingual_v2");
 	}
-
 
 	/**
 	 * EleventLabs TTS 변환
@@ -61,13 +91,56 @@ public class ElevenlabsManager {
 	 * @param voiceId voice 고유 값
 	 * @return 생성된 .mpga 파일
 	 */
-	public File elevenLabsTTS(String text, String voiceId){
+	public File elevenLabsTTS(String text, String voiceId) {
 		return SpeechGenerationBuilder.textToSpeech()
 			.file()
 			.setText(text)
 			.setGeneratedAudioOutputFormat(GeneratedAudioOutputFormat.MP3_44100_128)
 			.setVoiceId(voiceId)
 			.setVoiceSettings(new VoiceSettings(stability, similarity, style, useSpeakerBoost))
+			.setLatencyOptimization(StreamLatencyOptimization.NONE)
+			.build();
+	}
+
+	public File elevenLabsTTS(String text, VoiceType voiceType) {
+		if (voiceType == VoiceType.NARRATION) {
+			return elevenLabsTTSNarration(text);
+		}
+		return elevenLabsTTS(text, getCommonVoiceId(voiceType));
+	}
+
+	private String getCommonVoiceId(VoiceType voiceType) {
+		switch (voiceType) {
+			case OLD_MAN:
+				return oldManKey;
+			case OLD_WOMAN:
+				return oldWomanKey;
+			case YOUNG_MAN:
+				return youngManKey;
+			case YOUNG_WOMAN:
+				return youngWomanKey;
+			case MIDDLEAGE_MAN:
+				return middleAgeManKey;
+			case MIDDLEAGE_WOMAN:
+				return middleAgeWomanKey;
+			default:
+				throw new InvalidVoiceTypeException(ErrorStatus._INVALID_VOICE_TYPE);
+		}
+
+	}
+
+	/**
+	 * EleventLabs TTS 나레이션 변환
+	 * @param text 음성 TTS 변환 할 내용
+	 * @return 생성된 .mpga 파일
+	 */
+	public File elevenLabsTTSNarration(String text) {
+		return SpeechGenerationBuilder.textToSpeech()
+			.file()
+			.setText(text)
+			.setGeneratedAudioOutputFormat(GeneratedAudioOutputFormat.MP3_44100_128)
+			.setVoiceId(narrationWomanKey)
+			.setVoiceSettings(new VoiceSettings(Nstability, Nsimilarity, Nstyle, NuseSpeakerBoost))
 			.setLatencyOptimization(StreamLatencyOptimization.NONE)
 			.build();
 	}
@@ -86,13 +159,11 @@ public class ElevenlabsManager {
 		builder.withDescription("the emotional voice of the main character of a children's book");
 		builder.withLabel("language", "ko");
 		Voice voice = builder.create();
-		if(file != null && file.exists()){
+		if (file != null && file.exists()) {
 			file.delete();
 		}
 		return voice.getVoiceId();
 	}
-
-
 
 	/**
 	 * MultiPartFile -> File 변환
@@ -106,8 +177,7 @@ public class ElevenlabsManager {
 		// MultipartFile의 내용을 파일에 쓰기
 		try {
 			multipartFile.transferTo(file);
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FileConvertException(ErrorStatus._FILE_CONVERT_ERROR);
 		}
