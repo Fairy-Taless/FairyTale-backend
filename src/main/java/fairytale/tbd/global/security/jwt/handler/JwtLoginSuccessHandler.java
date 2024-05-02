@@ -9,6 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fairytale.tbd.global.enums.statuscode.SuccessStatus;
+import fairytale.tbd.global.response.ApiResponse;
 import fairytale.tbd.global.security.jwt.JwtService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtLoginSuccessHandler implements AuthenticationSuccessHandler {
 	private final JwtService jwtService;
 	private static final Logger LOGGER = LogManager.getLogger(JwtLoginSuccessHandler.class);
+	private final ObjectMapper objectMapper;
 
 	/**
 	 * 인증에 성공하면 Access Token과 Refresh Token을 생성한 후 반환
@@ -33,7 +38,8 @@ public class JwtLoginSuccessHandler implements AuthenticationSuccessHandler {
 		UserDetails principal = (UserDetails)authentication.getPrincipal();
 		String loginId = principal.getUsername();
 		response.setStatus(HttpServletResponse.SC_OK);
-		response.getWriter().write("AUTHENTICATION SUCCESS.");
+		response.setContentType("application/json;charset=UTF-8");
+		response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.onSuccess("로그인에 성공했습니다.")));
 		LOGGER.info("Jwt Login Success :: Login ID = {}", loginId);
 		loginSuccess(response, loginId);
 	}
