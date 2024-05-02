@@ -23,8 +23,10 @@ public class UserCommandServiceImpl implements UserCommandService {
 	@Transactional
 	@Override
 	public User addUser(UserRequestDTO.AddUserDTO request) {
+		// 비밀번호 암호화
 		String encodedPassword = passwordEncoder.encode(request.getPassword());
 		User user = UserConverter.toUser(request, encodedPassword);
+		// 유저 권한 추가
 		Authority authority = Authority.builder()
 			.role(Role.ROLE_USER)
 			.build();
