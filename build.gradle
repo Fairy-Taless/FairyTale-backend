@@ -1,52 +1,68 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
+	id 'java'
+	id 'org.springframework.boot' version '3.2.4'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'fairytale'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '17'
+	sourceCompatibility = '17'
 }
 
 // build 이름 변경
-jar {
-    archiveBaseName = 'fairytale'
-    version = '0.0.1-SNAPSHOT'
-    enabled = false
+jar{
+	archiveBaseName = 'fairytale'
+	version = '0.0.1-SNAPSHOT'
+	enabled = false
 }
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    //logging
-    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
-    modules {
-        module("org.springframework.boot:spring-boot-starter-logging") {
-            replacedBy("org.springframework.boot:spring-boot-starter-log4j2")
-        }
-    }
+	//logging
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	modules {
+		module("org.springframework.boot:spring-boot-starter-logging") {
+			replacedBy("org.springframework.boot:spring-boot-starter-log4j2")
+		}
+	}
 
-    // ElevenLabs API
-    implementation('net.andrewcpu:elevenlabs-api:2.7.8')
+	// ElevenLabs API
+    implementation ('net.andrewcpu:elevenlabs-api:2.7.8')
 
-    // AWS
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	// AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Face Swap API
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	implementation 'org.json:json:20200518'
+
+	// Face Swap API
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	implementation 'org.json:json:20200518'
+
+	// Face Swap API
+	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+	implementation 'org.json:json:20200518'
 
     // Spring Security OAUTH 2.1
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -62,5 +78,5 @@ dependencies {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
