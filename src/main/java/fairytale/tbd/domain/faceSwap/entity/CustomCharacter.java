@@ -1,5 +1,6 @@
 package fairytale.tbd.domain.faceSwap.entity;
 
+import fairytale.tbd.domain.fairytale.entity.Fairytale;
 import fairytale.tbd.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,15 +25,16 @@ public class CustomCharacter {
     @JoinColumn(name = "userId")
     private User userId;
 
-    @OneToOne
-    @JoinColumn(name = "storyBookId")
-    private OriginalStoryBook originalStoryBookId;
+
+    @ManyToOne
+    @JoinColumn(name = "fairytale_id")
+    private Fairytale fairytaleId;
 
     public void setUserId(User userId) {
         this.userId = userId;
     }
 
-    public void setOriginalStoryBookId(OriginalStoryBook originalStoryBookId){
-        this.originalStoryBookId = originalStoryBookId;
+    public void setFairytaleId(Fairytale fairytaleId) {
+        this.fairytaleId = fairytaleId;
     }
 }
