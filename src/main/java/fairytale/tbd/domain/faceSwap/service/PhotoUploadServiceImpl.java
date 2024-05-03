@@ -3,6 +3,7 @@ package fairytale.tbd.domain.faceSwap.service;
 import fairytale.tbd.domain.faceSwap.entity.Uuid;
 import fairytale.tbd.domain.faceSwap.repository.UuidRepository;
 import fairytale.tbd.domain.faceSwap.web.dto.FaceDetectRequestDto;
+import fairytale.tbd.domain.user.entity.User;
 import fairytale.tbd.global.aws.s3.AmazonS3Manager;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
 
     @Override
     @Transactional
-    public FaceDetectRequestDto savePhotos(MultipartFile file) throws IOException {
+    public FaceDetectRequestDto savePhotos(User userId, MultipartFile file) throws IOException {
         String imgURL = "";
         String uuid = UUID.randomUUID().toString();
 
