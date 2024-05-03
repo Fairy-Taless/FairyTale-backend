@@ -16,6 +16,9 @@ public class UserQueryServiceImpl implements UserQueryService {
 
 	private final UserRepository userRepository;
 
+	/**
+	 * 사용자를 권한과 함께 반환
+	 */
 	@Override
 	public Optional<User> getUserWithAuthorities(String loginId) {
 		User user = userRepository.findByLoginId(loginId).orElse(null);
@@ -23,6 +26,9 @@ public class UserQueryServiceImpl implements UserQueryService {
 		return Optional.ofNullable(user);
 	}
 
+	/**
+	 * 사용자의 RefreshToken을 데이터베이스에 업데이트
+	 */
 	@Transactional
 	@Override
 	public void updateRefreshToken(User user, String reIssuedRefreshToken) {

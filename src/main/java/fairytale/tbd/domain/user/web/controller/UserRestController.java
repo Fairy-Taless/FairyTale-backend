@@ -24,6 +24,9 @@ public class UserRestController {
 	private final UserCommandService userCommandService;
 	private static final Logger LOGGER = LogManager.getLogger(UserRestController.class);
 
+	/**
+	 * 회원 가입
+	 */
 	@PostMapping("/signup")
 	public ApiResponse<UserResponseDTO.AddUserResultDTO> join(@Valid @RequestBody UserRequestDTO.AddUserDTO request) {
 		LOGGER.info("request = {}", request);

@@ -30,6 +30,8 @@ public class VoiceConverter {
 			.isMainCharacter(request.isMainCharacter())
 			.voiceType(request.getVoiceType())
 			.num(request.getSegmentNum())
+			.userTTSSegmentList(new ArrayList<>())
+			.pageNum(request.getPageNum())
 			.build();
 	}
 

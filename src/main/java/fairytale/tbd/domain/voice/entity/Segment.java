@@ -1,4 +1,7 @@
 package fairytale.tbd.domain.voice.entity;
+
+import java.util.List;
+
 import fairytale.tbd.domain.fairytale.entity.Fairytale;
 import fairytale.tbd.domain.voice.enums.VoiceType;
 import fairytale.tbd.global.entity.BaseEntity;
@@ -11,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "fairytale_segment")
-public class Segment extends BaseEntity {
+public class Segment extends BaseEntity implements Comparable<Segment> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "fairytale_segment_id")
@@ -40,7 +44,10 @@ public class Segment extends BaseEntity {
 	private VoiceType voiceType;
 
 	@Column(name = "segment_num", nullable = false)
-	private Long num;
+	private Double num;
+
+	@Column(name = "page_num", nullable = false)
+	private Long pageNum;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fairytale_id", nullable = false)
@@ -49,8 +56,21 @@ public class Segment extends BaseEntity {
 	@OneToOne(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
 	private TTSSegment ttsSegment;
 
-	@OneToOne(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
-	private UserTTSSegment userTTSSegment;
+	@OneToMany(mappedBy = "segment", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserTTSSegment> userTTSSegmentList;
+
+	@Override
+	public int compareTo(Segment segment) {
+		if (this.pageNum == segment.pageNum) {
+			if (this.num < segment.num) {
+				return -1;
+			} else if (this.num == segment.num) {
+				return 0;
+			} else
+				return 1;
+		}
+		return 1;
+	}
 
 	// 연관 관계 편의 메서드
 
@@ -62,8 +82,8 @@ public class Segment extends BaseEntity {
 		this.ttsSegment = ttsSegment;
 	}
 
-	public void setUserTTSSegment(UserTTSSegment userTTSSegment) {
-		this.userTTSSegment = userTTSSegment;
+	public void addUserTTSSegment(UserTTSSegment userTTSSegment) {
+		userTTSSegmentList.add(userTTSSegment);
+		userTTSSegment.setSegment(this);
 	}
-
 }
