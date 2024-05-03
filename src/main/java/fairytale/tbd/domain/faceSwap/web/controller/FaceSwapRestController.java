@@ -11,18 +11,19 @@ import fairytale.tbd.domain.user.entity.User;
 import fairytale.tbd.global.annotation.LoginUser;
 import fairytale.tbd.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@Slf4j
 @RestController
 @RequestMapping("/faceSwap")
 @RequiredArgsConstructor
 public class FaceSwapRestController {
 
+    private final Logger LOGGER = LogManager.getLogger(FaceSwapRestController.class);
     private final PhotoUploadServiceImpl photoUploadService;
     private final FaceDetectApiServiceImpl faceDetectApiService;
     private final FaceSwapApiServiceImpl faceSwapApiService;
@@ -30,14 +31,26 @@ public class FaceSwapRestController {
     @PostMapping("/uploadImg")
     public ApiResponse<FaceDetectRequestDto> uploadImg(@LoginUser User user, @ModelAttribute MultipartFile file) throws IOException{
         FaceDetectRequestDto faceDetectRequestDto = photoUploadService.savePhotos(user, file);
-        log.info("Face detect request : {}", faceDetectRequestDto);
         return ApiResponse.onSuccess(faceDetectRequestDto);
     }
 
-/*    @GetMapping("/createCharacter")
-    public ApiResponse<FaceSwapResponseDtoDto> detectFace(FaceDetectRequestDto faceDetectRequestDto) throws IOException {
-        FaceDetectResponseDto faceDetectResponseDto = faceDetectApiService.getOptFromFaceDetectApi(faceDetectRequestDto);
 
-        return ApiResponse.onSuccess();
-    }*/
+    @PostMapping("/test")
+    public ApiResponse<FaceDetectResponseDto> test(@RequestBody FaceDetectRequestDto faceDetectRequestDto){
+
+        LOGGER.info("Face detect request : {}", faceDetectRequestDto);
+
+
+        FaceDetectResponseDto optFromFaceDetectApi = null;
+
+        try{
+             optFromFaceDetectApi = faceDetectApiService.getOptFromFaceDetectApi(faceDetectRequestDto);
+        }
+        catch( Exception e){
+            e.printStackTrace();
+        }
+
+
+        return ApiResponse.onSuccess(optFromFaceDetectApi);
+    }
 }
