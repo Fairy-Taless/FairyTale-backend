@@ -1,5 +1,6 @@
 package fairytale.tbd.domain.faceSwap.entity;
 
+import fairytale.tbd.domain.fairytale.entity.Fairytale;
 import fairytale.tbd.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,18 +22,19 @@ public class OriginalCharacter {
     private String originalURL;
 
     @ManyToOne
-    @JoinColumn(name = "storyBookId")
-    private OriginalStoryBook originalStoryBook;
+    @JoinColumn(name = "fairytale_id")
+    private Fairytale fairytaleId;
 
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
-    public void setOriginalStoryBook(OriginalStoryBook originalStoryBook){
-        this.originalStoryBook = originalStoryBook;
-    }
-
     public void setUser(User user){
         this.user = user;
     }
+
+    public void setFairytaleId(Fairytale fairytaleId) {
+        this.fairytaleId = fairytaleId;
+    }
+
 }
