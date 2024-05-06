@@ -13,10 +13,13 @@ import fairytale.tbd.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/faceSwap")
@@ -52,5 +55,21 @@ public class FaceSwapRestController {
 
 
         return ApiResponse.onSuccess(optFromFaceDetectApi);
+    }
+
+    @PostMapping("/testSwapApi")
+    public ApiResponse<Map<String, String>> test(@RequestBody FaceSwapRequestDto.FaceSwapRequest faceSwapRequestDto, BindingResult bindingResult){
+
+        Map<String, String> test = new HashMap<>();
+
+        try{
+            test = faceSwapApiService.getFaceSwapImg(faceSwapRequestDto);
+        }
+        catch( Exception e){
+            e.printStackTrace();
+        }
+
+
+        return ApiResponse.onSuccess(test);
     }
 }
