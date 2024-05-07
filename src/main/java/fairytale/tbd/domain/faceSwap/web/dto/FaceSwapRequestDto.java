@@ -2,34 +2,27 @@ package fairytale.tbd.domain.faceSwap.web.dto;
 
 import lombok.*;
 
+import java.util.List;
+
+@ToString
 public class FaceSwapRequestDto {
 
     @Getter
     @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class FaceSwapRequest {
 
-        private SourceImage sourseImage;
+        private SourceImage sourceImage;
 
         private TargetImage targetImage;
 
-        // 1 means open, 0 means close
-        private int faceEnhance;
-
         private String modifyImage;
 
-        private String webHookUrl;
-
+        private String webhookUrl;
     }
 
     // Original Image
     @Getter
     @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class SourceImage {
 
         private String sourcePath;
@@ -41,9 +34,6 @@ public class FaceSwapRequestDto {
     // User Image
     @Getter
     @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class TargetImage {
 
         private String targetPath;

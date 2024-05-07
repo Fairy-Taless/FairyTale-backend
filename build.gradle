@@ -64,6 +64,9 @@ dependencies {
 	implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 	implementation 'org.json:json:20200518'
 
+	// webhook
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
     // Spring Security OAUTH 2.1
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-oauth2-client'
