@@ -80,7 +80,7 @@ public class FaceSwapRestController {
     }
 
     @PostMapping("/webhook")
-    public void webhook(@ModelAttribute WebhookRequestDTO.RequestDTO request){
+    public void webhook(@RequestBody WebhookRequestDTO.RequestDTO request){
         LOGGER.info("request = {}", request);
     }
 }
