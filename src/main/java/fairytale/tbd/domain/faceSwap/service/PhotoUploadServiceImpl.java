@@ -71,8 +71,12 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
 		lastSaveQueue.ifPresent(imageSaveQueue -> {
 			userQueryService.getUserWithUserId(imageSaveQueue.getUserId()).ifPresent(user -> {
 				fairytaleQueryService.getFairytaleById(imageSaveQueue.getFairytaleId()).ifPresent(fairytale -> {
+					String savedURL = amazonS3Manager.uploadJpegImageFromUrl(
+						amazonS3Manager.generateS3SavePath(amazonS3Manager.FACE_SWAP_USER_PATH),
+						imageSaveQueue.getImageURL());
+
 					CustomCharacter customCharacter = CustomCharacter.builder()
-						.customURL(imageSaveQueue.getImageURL())
+						.customURL(savedURL)
 						.pageNum(imageSaveQueue.getPageNum())
 						.build();
 
