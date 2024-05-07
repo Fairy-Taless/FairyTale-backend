@@ -11,9 +11,9 @@ public class FaceSwapRequestDto {
     @Setter
     public static class FaceSwapRequest {
 
-        private List<SourceImage> sourceImage;
+        private SourceImage sourceImage;
 
-        private List<TargetImage> targetImage;
+        private TargetImage targetImage;
 
         private String modifyImage;
 

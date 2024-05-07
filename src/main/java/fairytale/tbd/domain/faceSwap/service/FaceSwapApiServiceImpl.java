@@ -1,7 +1,10 @@
 package fairytale.tbd.domain.faceSwap.service;
 
 import fairytale.tbd.domain.faceSwap.web.dto.FaceSwapRequestDto;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import okhttp3.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +18,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Service
@@ -25,11 +30,12 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
     @Value("${face.akool.apikey}")
     private String apikey;
 
-
     @Value("${face.akool.clientId}")
     private String clientId;
 
     private static final Logger LOGGER = LogManager.getLogger(FaceSwapApiServiceImpl.class);
+
+    private final ObjectMapper objectMapper;
 
     @Override
     @Transactional
@@ -39,7 +45,8 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
         String customCharacterUrl = "";
         String customCharacterId = "";
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
 
         MediaType mediaType = MediaType.parse("application/json");
 
@@ -56,7 +63,7 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
                 "            \"opts\": \"" + faceSwapRequest.getTargetImage() + "\"\n" +
                 "        }\n" +
                 "    ],\n" +
-                "    \"face_enhance\": 1" +  ",\n" +
+                "    \"face_enhance\": 1" +  ",\n" + // 나중에 쉼표 넣기
                 "    \"modifyImage\": \"" + faceSwapRequest.getModifyImage() + "\",\n" +
                 "    \"webhookUrl\": \"" + faceSwapRequest.getWebhookUrl() + "\"\n" +
                 "}";
@@ -103,46 +110,30 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
         return apiResponse;
     }
 
-    private String getToken() {
-        String accessToken = "";
+    public String getToken() {
 
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        OkHttpClient client = new OkHttpClient().newBuilder()
+            .build();
         MediaType mediaType = MediaType.parse("application/json");
-
-        JSONObject jsonBody = new JSONObject();
-        jsonBody.put("clientId", clientId);
-        jsonBody.put("clientSecret", apikey);
-
-        RequestBody body = RequestBody.create(mediaType, jsonBody.toString());
-
+        RequestBody body = RequestBody.create(mediaType,
+            "{\r\n    \"clientId\": \"" + clientId + "\" ,\r\n    \"clientSecret\": \"" + apikey + "\"\r\n}");
         Request request = new Request.Builder()
-                .url("https://openapi.akool.com/api/open/v3/getToken")
-                .method("POST", body)
-                .addHeader("Content-Type", "application/json")
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            String responseData = response.body().string();
-
-            LOGGER.info("response : {}", responseData);
-
-            JSONObject jsonObject = new JSONObject(responseData);
-
-            int errCode = jsonObject.getInt("code");
-            if (errCode != 1000) {
-                throw new IOException("Error! \n" +
-                        "error code : " +
-                        errCode + "\n");
-            }
-
-            accessToken = jsonObject.getString("token");
+            .url("https://openapi.akool.com/api/open/v3/getToken")
+            .method("POST", body)
+            .addHeader("Content-Type", "application/json")
+            .build();
+        try {
+            Response response = client.newCall(request).execute();
+            String responseBody = response.body().string();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+            String token = jsonNode.get("token").asText();
+            LOGGER.info("token = {}", token);
+            return token;
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.error("getToken() 요청 중 에러 발생");
+            throw new RuntimeException(e);
         }
-
-        LOGGER.info("access Token from AKOOL : {}", accessToken);
-        return accessToken;
     }
-
 }
 
