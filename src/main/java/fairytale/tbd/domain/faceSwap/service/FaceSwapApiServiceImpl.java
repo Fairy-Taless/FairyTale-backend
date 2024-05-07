@@ -1,6 +1,8 @@
 package fairytale.tbd.domain.faceSwap.service;
 
+import fairytale.tbd.domain.faceSwap.util.CryptoUtils;
 import fairytale.tbd.domain.faceSwap.web.dto.FaceSwapRequestDto;
+import fairytale.tbd.domain.faceSwap.web.dto.WebhookRequestDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -36,6 +38,8 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
     private static final Logger LOGGER = LogManager.getLogger(FaceSwapApiServiceImpl.class);
 
     private final ObjectMapper objectMapper;
+
+    private final CryptoUtils cryptoUtils;
 
     @Override
     @Transactional
@@ -134,6 +138,10 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
             LOGGER.error("getToken() 요청 중 에러 발생");
             throw new RuntimeException(e);
         }
+    }
+
+    public String getSwapImageURL(WebhookRequestDTO.RequestDTO webhookRequestDTO){
+        return cryptoUtils.getURL(webhookRequestDTO);
     }
 }
 

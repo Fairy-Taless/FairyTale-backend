@@ -11,6 +11,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import fairytale.tbd.domain.faceSwap.web.dto.WebhookRequestDTO;
+
 @Component
 public class CryptoUtils {
 
@@ -84,10 +86,10 @@ public class CryptoUtils {
 	}
 
 	// Example usage
-	public String getURL(String timestamp, String nonce, String msgEncrypt, String signature){
-		String newSignature = generateMsgSignature(clientId, timestamp, nonce, msgEncrypt);
-		if (signature.equals(newSignature)) {
-			String result = generateAesDecrypt(msgEncrypt, clientId, clientSecret);
+	public String getURL(WebhookRequestDTO.RequestDTO webhookRequestDTO){
+		String newSignature = generateMsgSignature(clientId, webhookRequestDTO.getTimestamp(), webhookRequestDTO.getNonce(), webhookRequestDTO.getDataEncrypt());
+		if (webhookRequestDTO.getSignature().equals(newSignature)) {
+			String result = generateAesDecrypt(webhookRequestDTO.getDataEncrypt(), clientId, clientSecret);
 			return result;
 		}
 		return null;

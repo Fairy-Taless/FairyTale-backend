@@ -32,7 +32,7 @@ public class FaceSwapRestController {
     private final PhotoUploadServiceImpl photoUploadService;
     private final FaceDetectApiServiceImpl faceDetectApiService;
     private final FaceSwapApiServiceImpl faceSwapApiService;
-    private final CryptoUtils cryptoUtils;
+
 
     @PostMapping("/uploadImg")
     public ApiResponse<FaceDetectResponseDto> uploadImg(@LoginUser User user, @ModelAttribute MultipartFile file) throws IOException{
@@ -80,7 +80,11 @@ public class FaceSwapRestController {
     }
 
     @PostMapping("/webhook")
-    public void webhook(@RequestBody WebhookRequestDTO.RequestDTO request){
+    public ApiResponse<String> webhook(@RequestBody WebhookRequestDTO.RequestDTO request){
         LOGGER.info("request = {}", request);
+
+        String swapResult = faceSwapApiService.getSwapImageURL(request);
+        LOGGER.info("swapResult = {}", swapResult);
+        return ApiResponse.onSuccess("thank you");
     }
 }
