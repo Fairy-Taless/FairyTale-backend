@@ -64,6 +64,7 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
 		return imageSaveQueue;
 	}
 
+	@Transactional
 	@Override
 	public void saveCustomCharacter() {
 		Optional<ImageSaveQueue> lastSaveQueue = getLastSaveQueueAndDelete();
