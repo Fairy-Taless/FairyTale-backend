@@ -1,7 +1,6 @@
 package fairytale.tbd.domain.faceSwap.service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +42,8 @@ public class PhotoUploadServiceImpl implements PhotoUploadService {
 	@Transactional
 	public FaceDetectRequestDto savePhotos(User userId, MultipartFile file) {
 		String imgURL = "";
-		imgURL = amazonS3Manager.uploadFile(UUID.randomUUID().toString(), file);
+		imgURL = amazonS3Manager.uploadFile(amazonS3Manager.generateS3SavePath(amazonS3Manager.FACE_SWAP_USER_PATH),
+			file);
 
 		FaceDetectRequestDto faceDetectRequestDto = new FaceDetectRequestDto(imgURL);
 
