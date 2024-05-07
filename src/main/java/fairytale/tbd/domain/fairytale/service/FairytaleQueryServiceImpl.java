@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FairytaleQueryServiceImpl implements FairytaleQueryService {
-	private FairytaleRepository fairytaleRepository;
+	private final FairytaleRepository fairytaleRepository;
 
 	@Override
 	public Optional<Fairytale> getFairytaleById(Long fairytaleId) {
