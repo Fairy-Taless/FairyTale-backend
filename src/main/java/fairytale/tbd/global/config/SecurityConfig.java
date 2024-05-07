@@ -56,7 +56,7 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(
 				SessionCreationPolicy.STATELESS)) // Token 기반 인증 => session 사용 X
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/login", "/api/user/signup").permitAll() // 허용된 주소
+				.requestMatchers("/login", "/api/user/signup", "/faceSwap/webhook").permitAll() // 허용된 주소
 				.anyRequest().authenticated()
 			)
 			// CORS
