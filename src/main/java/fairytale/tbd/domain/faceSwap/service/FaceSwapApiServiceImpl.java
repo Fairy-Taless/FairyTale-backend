@@ -39,8 +39,6 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
 
     private final ObjectMapper objectMapper;
 
-    private final CryptoUtils cryptoUtils;
-
     @Override
     @Transactional
     public Map<String, String> getFaceSwapImg(FaceSwapRequestDto.FaceSwapRequest faceSwapRequest) throws IOException{
@@ -57,20 +55,20 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
         String requestString =  "{\n" +
                 "    \"sourceImage\": [\n" +
                 "        {\n" +
-                "            \"path\": \"" + faceSwapRequest.getSourceImage() + "\",\n" +
-                "            \"opts\": \"" + faceSwapRequest.getSourceImage() + "\"\n" +
+                "            \"path\": \"" + faceSwapRequest.getSourceImage().getSourcePath() + "\",\n" +
+                "            \"opts\": \"" + faceSwapRequest.getSourceImage().getSourceOpts() + "\"\n" +
                 "        }\n" +
                 "    ],\n" +
                 "    \"targetImage\": [\n" +
                 "        {\n" +
-                "            \"path\": \"" + faceSwapRequest.getTargetImage() + "\",\n" +
-                "            \"opts\": \"" + faceSwapRequest.getTargetImage() + "\"\n" +
+                "            \"path\": \"" + faceSwapRequest.getTargetImage().getTargetPath() + "\",\n" +
+                "            \"opts\": \"" + faceSwapRequest.getTargetImage().getTargetOpts() + "\"\n" +
                 "        }\n" +
                 "    ],\n" +
-                "    \"face_enhance\": 1" +  ",\n" + // 나중에 쉼표 넣기
                 "    \"modifyImage\": \"" + faceSwapRequest.getModifyImage() + "\",\n" +
                 "    \"webhookUrl\": \"" + faceSwapRequest.getWebhookUrl() + "\"\n" +
                 "}";
+
 
         RequestBody body = RequestBody.create(mediaType, requestString);
 
@@ -140,8 +138,5 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService{
         }
     }
 
-    public String getSwapImageURL(WebhookRequestDTO.RequestDTO webhookRequestDTO){
-        return cryptoUtils.getURL(webhookRequestDTO);
-    }
 }
 
