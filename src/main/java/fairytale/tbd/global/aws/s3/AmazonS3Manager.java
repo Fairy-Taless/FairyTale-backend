@@ -75,7 +75,7 @@ public class AmazonS3Manager {
 			log.error("error at AmazonS3Manager uploadFile : {}", (Object)e.getStackTrace());
 			throw new GeneralException(ErrorStatus._S3_FILE_UPLOAD_ERROR);
 		}
-		return amazonS3.getUrl(amazonConfig.getBucket(), keyName).toString();
+		return amazonS3.getUrl(amazonConfig.getBucket(), keyName + ".jpeg").toString();
 	}
 
 	public String generateS3SavePath(String path) {
