@@ -66,7 +66,6 @@ public class AmazonS3Manager {
 			InputStream inputStream = url.openStream();
 			ObjectMetadata metadata = new ObjectMetadata();
 			metadata.setContentType("image/jpeg"); // Change content type based on your image type
-			metadata.setContentLength(inputStream.available());
 
 			PutObjectResult putObjectResult = amazonS3.putObject(
 				new PutObjectRequest(amazonConfig.getBucket(), keyName, inputStream, metadata));
