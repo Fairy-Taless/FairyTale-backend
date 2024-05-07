@@ -36,4 +36,9 @@ public class UserQueryServiceImpl implements UserQueryService {
 		userRepository.saveAndFlush(user);
 	}
 
+	@Override
+	public Optional<User> getUserWithUserId(Long userId) {
+		return userRepository.findById(userId);
+	}
+
 }

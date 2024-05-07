@@ -9,4 +9,6 @@ public interface UserQueryService {
 	Optional<User> getUserWithAuthorities(String loginId);
 
 	void updateRefreshToken(User user, String reIssuedRefreshToken);
+
+	Optional<User> getUserWithUserId(Long userId);
 }
