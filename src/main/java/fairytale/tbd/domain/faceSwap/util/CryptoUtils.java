@@ -6,6 +6,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Arrays;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -64,27 +66,6 @@ public class CryptoUtils {
 			return null;
 		}
 	}
-
-	// Encryption algorithm
-	public static String generateAesEncrypt(String data, String clientId, String clientSecret) {
-		try {
-			byte[] keyBytes = clientSecret.getBytes(StandardCharsets.UTF_8);
-			byte[] ivBytes = clientId.getBytes(StandardCharsets.UTF_8);
-
-			SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
-			IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
-
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-			cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
-
-			byte[] encryptedBytes = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
-			return DatatypeConverter.printHexBinary(encryptedBytes).toLowerCase();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	// Example usage
 	public String getURL(WebhookRequestDTO.RequestDTO webhookRequestDTO){
 		String newSignature = generateMsgSignature(clientId, webhookRequestDTO.getTimestamp(), webhookRequestDTO.getNonce(), webhookRequestDTO.getDataEncrypt());

@@ -15,6 +15,7 @@ import fairytale.tbd.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,11 +81,11 @@ public class FaceSwapRestController {
     }
 
     @PostMapping("/webhook")
-    public ApiResponse<String> webhook(@RequestBody WebhookRequestDTO.RequestDTO request){
+    public ResponseEntity<?> webhook(@RequestBody WebhookRequestDTO.RequestDTO request){
         LOGGER.info("request = {}", request);
 
         String swapResult = faceSwapApiService.getSwapImageURL(request);
         LOGGER.info("swapResult = {}", swapResult);
-        return ApiResponse.onSuccess("thank you");
+        return ResponseEntity.ok().build();
     }
 }
