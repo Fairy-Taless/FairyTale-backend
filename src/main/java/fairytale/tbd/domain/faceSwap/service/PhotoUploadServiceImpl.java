@@ -1,18 +1,25 @@
 package fairytale.tbd.domain.faceSwap.service;
 
-import fairytale.tbd.domain.faceSwap.entity.Uuid;
-import fairytale.tbd.domain.faceSwap.repository.UuidRepository;
-import fairytale.tbd.domain.faceSwap.web.dto.FaceDetectRequestDto;
-import fairytale.tbd.domain.user.entity.User;
-import fairytale.tbd.global.aws.s3.AmazonS3Manager;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.UUID;
+import fairytale.tbd.domain.faceSwap.entity.CustomCharacter;
+import fairytale.tbd.domain.faceSwap.entity.ImageSaveQueue;
+import fairytale.tbd.domain.faceSwap.repository.CustomCharacterRepository;
+import fairytale.tbd.domain.faceSwap.repository.ImageSaveQueueRepository;
+import fairytale.tbd.domain.faceSwap.web.dto.FaceDetectRequestDto;
+import fairytale.tbd.domain.fairytale.service.FairytaleQueryService;
+import fairytale.tbd.domain.user.entity.User;
+import fairytale.tbd.domain.user.service.UserQueryService;
+import fairytale.tbd.global.aws.s3.AmazonS3Manager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -20,27 +27,61 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class PhotoUploadServiceImpl implements PhotoUploadService {
 
-    private final UuidRepository uuidRepository;
-    private final AmazonS3Manager amazonS3Manager;
+	private static final Logger LOGGER = LogManager.getLogger(PhotoUploadServiceImpl.class);
 
-    @Override
-    @Transactional
-    public FaceDetectRequestDto savePhotos(User userId, MultipartFile file) throws IOException {
-        String imgURL = "";
-        String uuid = UUID.randomUUID().toString();
+	private final AmazonS3Manager amazonS3Manager;
 
-        try {
-            Uuid saveUuid = uuidRepository.save(Uuid.builder().uuid(uuid).build());
-            byte[] imageData = file.getBytes();
-            imgURL = amazonS3Manager.uploadFile(saveUuid.getUuid(), file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+	private final ImageSaveQueueRepository imageSaveQueueRepository;
 
-        FaceDetectRequestDto faceDetectRequestDto = new FaceDetectRequestDto();
-        faceDetectRequestDto.setImgURL(imgURL);
+	private final UserQueryService userQueryService;
 
-        return faceDetectRequestDto;
-    }
+	private final FairytaleQueryService fairytaleQueryService;
 
+	private final CustomCharacterRepository customCharacterRepository;
+
+	@Override
+	@Transactional
+	public FaceDetectRequestDto savePhotos(User userId, MultipartFile file) {
+		String imgURL = "";
+		imgURL = amazonS3Manager.uploadFile(UUID.randomUUID().toString(), file);
+
+		FaceDetectRequestDto faceDetectRequestDto = new FaceDetectRequestDto(imgURL);
+
+		return faceDetectRequestDto;
+	}
+
+	@Override
+	public String migrateToS3(String customImageUrl) {
+		return amazonS3Manager.uploadJpegImageFromUrl(
+			amazonS3Manager.generateS3SavePath(amazonS3Manager.FACE_SWAP_USER_PATH), customImageUrl);
+	}
+
+	@Override
+	@Transactional
+	public Optional<ImageSaveQueue> getLastSaveQueueAndDelete() {
+		Optional<ImageSaveQueue> imageSaveQueue = imageSaveQueueRepository.findFirstByOrderByCreatedAtAsc();
+		imageSaveQueue.ifPresent(saveQueue -> imageSaveQueueRepository.delete(saveQueue));
+		return imageSaveQueue;
+	}
+
+	@Override
+	public void saveCustomCharacter() {
+		Optional<ImageSaveQueue> lastSaveQueue = getLastSaveQueueAndDelete();
+		lastSaveQueue.ifPresent(imageSaveQueue -> {
+			userQueryService.getUserWithUserId(imageSaveQueue.getUserId()).ifPresent(user -> {
+				fairytaleQueryService.getFairytaleById(imageSaveQueue.getFairytaleId()).ifPresent(fairytale -> {
+					CustomCharacter customCharacter = CustomCharacter.builder()
+						.customURL(imageSaveQueue.getImageURL())
+						.pageNum(imageSaveQueue.getPageNum())
+						.build();
+
+					user.addCustomCharacter(customCharacter);
+					fairytale.addCustomCharacter(customCharacter);
+
+					customCharacterRepository.save(customCharacter);
+					LOGGER.info("Custom Character 저장 성공");
+				});
+			});
+		});
+	}
 }
