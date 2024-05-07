@@ -4,5 +4,9 @@ import fairytale.tbd.domain.user.entity.User;
 import fairytale.tbd.domain.user.web.dto.UserRequestDTO;
 
 public interface UserCommandService {
-	public User addUser(UserRequestDTO.AddUserDTO request);
+	User addUser(UserRequestDTO.AddUserDTO request);
+
+	void setUserImageUrl(String imageUrl, User user);
+
+	void setUserImageOpts(String imageOpts, User user);
 }

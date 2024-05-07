@@ -37,4 +37,18 @@ public class UserCommandServiceImpl implements UserCommandService {
 		user.addAuthority(authority);
 		return userRepository.save(user);
 	}
+
+	@Transactional
+	@Override
+	public void setUserImageUrl(String imageUrl, User user) {
+		user.setFaceImageUrl(imageUrl);
+		userRepository.saveAndFlush(user);
+	}
+
+	@Transactional
+	@Override
+	public void setUserImageOpts(String imageOpts, User user) {
+		user.setOpts(imageOpts);
+		userRepository.saveAndFlush(user);
+	}
 }
