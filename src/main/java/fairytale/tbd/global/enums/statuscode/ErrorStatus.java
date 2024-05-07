@@ -9,6 +9,10 @@ public enum ErrorStatus implements BaseCode {
 	_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
 	_FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
+	_REQUEST_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5001", "외부 API 요청에 실패했습니다."),
+
+	_S3_FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON5002", "S3 파일 업로드 중 오류가 발생했습니다."),
+
 	// Fairytale
 
 	_FAIRYTALE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FAIRYTALE4001", "존재하지 않는 동화입니다."),
@@ -16,6 +20,13 @@ public enum ErrorStatus implements BaseCode {
 
 	// ElevenLabs
 	_FILE_CONVERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일 변환에 실패했습니다."),
+
+	// Face Swap
+
+	_USER_FACE_NOT_EXIST(HttpStatus.BAD_REQUEST, "FACESWAP4002", "사용자가 업로드한 얼굴 이미지가 없습니다."),
+	_FACE_NOT_DETECT_ERROR(HttpStatus.BAD_REQUEST, "FACESWAP4001", "이미지에서 인식된 얼굴이 없습니다."),
+	_FACE_SWAP_FAILURE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FACESWAP5001", "얼굴 변환에 실패했습니다."),
+	_EMPTY_SAVE_QUEUE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FACESWAP5002", "저장 큐가 비어있습니다."),
 
 	// Voice
 
