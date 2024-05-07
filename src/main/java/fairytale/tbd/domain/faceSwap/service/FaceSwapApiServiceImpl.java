@@ -191,7 +191,7 @@ public class FaceSwapApiServiceImpl implements FaceSwapApiService {
 			String url = jsonObject.getJSONObject("data").getString("url");
 			String id = jsonObject.getJSONObject("data").getString("_id");
 
-			return new SwapResult(url, id);
+			return new SwapResult(id, url);
 		} catch (IOException e) {
 			LOGGER.error("Face Swap에 실패했습니다.");
 			e.printStackTrace();
