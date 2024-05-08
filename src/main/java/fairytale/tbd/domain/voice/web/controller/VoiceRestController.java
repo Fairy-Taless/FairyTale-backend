@@ -61,10 +61,10 @@ public class VoiceRestController {
 	@GetMapping("/segment/test")
 	public ApiResponse<Map<Long, List<VoiceResponseDTO.GetUserTTSSegmentResultDetailDTO>>> getUserSegment(
 		@LoginUser User user,
-		@RequestParam(name = "fairytaleName") String fairytaleName) {
+		@RequestParam(name = "fairytaleId") Long fairytaleId) {
 		LOGGER.info("getUserSegment START");
 		Map<Long, List<VoiceResponseDTO.GetUserTTSSegmentResultDetailDTO>> userTTSSegmentList = voiceQueryService.getUserTTSSegmentList(
-			user, fairytaleName);
+			user, fairytaleId, true);
 		return ApiResponse.onSuccess(userTTSSegmentList);
 	}
 

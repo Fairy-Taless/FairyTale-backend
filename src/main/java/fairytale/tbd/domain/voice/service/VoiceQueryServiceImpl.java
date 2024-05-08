@@ -46,10 +46,10 @@ public class VoiceQueryServiceImpl implements VoiceQueryService {
 	@Transactional
 	@Override
 	public Map<Long, List<VoiceResponseDTO.GetUserTTSSegmentResultDetailDTO>> getUserTTSSegmentList(User user,
-		String fairytaleName) {
+		Long fairytaleId, boolean changeVoice) {
 		// 동화 이름이 유효한지 검증
 		// TODO Bean Validation으로 넘기기
-		Fairytale fairytale = fairytaleRepository.findByName(fairytaleName)
+		Fairytale fairytale = fairytaleRepository.findById(fairytaleId)
 			.orElseThrow(() -> new FairytaleNotFoundException(ErrorStatus._FAIRYTALE_NOT_FOUND));
 
 		// 동화의 문장 목록을 불러온 후, 페이지 번호, 문장 번호에 대해 오름차순 정렬
@@ -61,7 +61,7 @@ public class VoiceQueryServiceImpl implements VoiceQueryService {
 		for (Segment segment : segmentList) {
 			VoiceResponseDTO.GetUserTTSSegmentResultDetailDTO resultDTO = null;
 			// TODO 상속관계로 변경, ASYNC
-			if (segment.isMainCharacter()) {
+			if (segment.isMainCharacter() && changeVoice) {
 				UserTTSSegment userTTSSegment = userTTSSegmentRepository.findByUserAndSegment(user, segment)
 					.orElseGet(() -> voiceCommandService.saveUserTTSSegment(user, segment));
 

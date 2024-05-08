@@ -8,5 +8,5 @@ import fairytale.tbd.domain.voice.web.dto.VoiceResponseDTO;
 
 public interface VoiceQueryService {
 	Map<Long, List<VoiceResponseDTO.GetUserTTSSegmentResultDetailDTO>> getUserTTSSegmentList(User user,
-		String fairytaleName);
+		Long fairytaleId, boolean changeVoice);
 }

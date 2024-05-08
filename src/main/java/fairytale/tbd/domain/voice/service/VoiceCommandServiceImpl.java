@@ -18,7 +18,6 @@ import fairytale.tbd.domain.voice.entity.Segment;
 import fairytale.tbd.domain.voice.entity.TTSSegment;
 import fairytale.tbd.domain.voice.entity.UserTTSSegment;
 import fairytale.tbd.domain.voice.entity.Voice;
-import fairytale.tbd.domain.voice.entity.VoiceSample;
 import fairytale.tbd.domain.voice.exception.ExistVoiceException;
 import fairytale.tbd.domain.voice.exception.VoiceNotFoundException;
 import fairytale.tbd.domain.voice.exception.VoiceSaveErrorException;
@@ -70,16 +69,16 @@ public class VoiceCommandServiceImpl implements VoiceCommandService {
 			throw new VoiceSaveErrorException(ErrorStatus._VOICE_SAVE_ERROR);
 		}
 
-		String savePath = amazonS3Manager.uploadFile(
-			amazonS3Manager.generateS3SavePath(amazonS3Manager.VOICE_SAMPLE_PATH),
-			request.getSample());
-
-		VoiceSample voiceSample = VoiceSample.builder()
-			.url(savePath)
-			.build();
+		// String savePath = amazonS3Manager.uploadFile(
+		// 	amazonS3Manager.generateS3SavePath(amazonS3Manager.VOICE_SAMPLE_PATH),
+		// 	request.getSample());
+		//
+		// VoiceSample voiceSample = VoiceSample.builder()
+		// 	.url(savePath)
+		// 	.build();
 
 		Voice voice = VoiceConverter.toVoice(keyId);
-		voice.addVoiceSample(voiceSample);
+		// voice.addVoiceSample(voiceSample);
 
 		user.setVoice(voice);
 		voiceRepository.save(voice);

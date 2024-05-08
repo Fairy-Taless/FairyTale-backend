@@ -17,6 +17,7 @@ public enum ErrorStatus implements BaseCode {
 
 	_FAIRYTALE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FAIRYTALE4001", "존재하지 않는 동화입니다."),
 	_FAIRYTALE_EXIST_ERROR(HttpStatus.BAD_REQUEST, "FAIRYTALE4002", "이미 존재하는 이름의 동화입니다."),
+	_FAIRYTALE_DATA_NOT_EXIST(HttpStatus.INTERNAL_SERVER_ERROR, "FAIRYTALE5001", "동화 변환에 실패했습니다. 동화 데이터에 오류가 있습니다."),
 
 	// ElevenLabs
 	_FILE_CONVERT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일 변환에 실패했습니다."),

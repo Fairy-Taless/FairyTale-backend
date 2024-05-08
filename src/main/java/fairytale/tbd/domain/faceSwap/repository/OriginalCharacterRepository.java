@@ -1,7 +1,13 @@
 package fairytale.tbd.domain.faceSwap.repository;
 
-import fairytale.tbd.domain.faceSwap.entity.OriginalCharacter;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import fairytale.tbd.domain.faceSwap.entity.OriginalCharacter;
+
+@Repository
 public interface OriginalCharacterRepository extends JpaRepository<OriginalCharacter, Long> {
+	List<OriginalCharacter> findByFairytaleId(Long fairytaleId);
 }
