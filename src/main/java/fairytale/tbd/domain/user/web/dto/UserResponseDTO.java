@@ -12,8 +12,19 @@ public class UserResponseDTO {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class AddUserResultDTO{
+	public static class AddUserResultDTO {
 		private Long userId;
 		private LocalDateTime createdAt;
+	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class MyPageGetResultDto {
+		private String imageUrl;
+		private String userName;
+
+		private Boolean uploadedVoice;
 	}
 }
