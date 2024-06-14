@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fairytale.tbd.domain.user.entity.User;
 import fairytale.tbd.domain.user.repository.UserRepository;
+import fairytale.tbd.domain.user.web.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -41,4 +42,12 @@ public class UserQueryServiceImpl implements UserQueryService {
 		return userRepository.findById(userId);
 	}
 
+	@Override
+	public UserResponseDTO.MyPageGetResultDto getUserMyPage(User user) {
+		return UserResponseDTO.MyPageGetResultDto.builder()
+			.userName(user.getUsername())
+			.imageUrl(user.getFaceImageUrl())
+			.uploadedVoice(user.getVoice() != null)
+			.build();
+	}
 }
